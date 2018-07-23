@@ -4,7 +4,6 @@
             [cljs.pprint :refer [pprint]]
             [clojure.string :refer [split]]
             [life.evaluator :refer [read-eval]])
-  (:require-macros [life.macros :as macros])
   (:import [goog.string StringBuffer]))
 
 (declare pages init-forms)
