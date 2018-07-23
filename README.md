@@ -13,7 +13,10 @@ To run the demo, run:
 
 `lein figwheel`
 
-Then connect a browser to http://localhost:3449
+Figwheel will complain about referenced vars that aren't defined,
+but these warnings can be ignored.
+
+Next, connect a browser to http://localhost:3449
 
 ## The Demo Code
 

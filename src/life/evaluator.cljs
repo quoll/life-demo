@@ -3,8 +3,7 @@
   (:require [cljs.js]
             [clojure.core.matrix]
             [life.matrix]
-            [life.display])
-  (:require-macros [life.macros :as macros]))
+            [life.display]))
 
 (def init-forms
   ["(def reshape clojure.core.matrix/reshape)"
