@@ -34,25 +34,6 @@
    using numerical boolean values (0/1)"
   [a b] (emap (nbool #(not (zero? %))) (add a b)))
 
-(defn outer
-  "Creates an outer product of 2 sequences. The elements of the product
-   are stored in a record with keys :a :b. Ideally these would be a
-   2-element vector, but matrix operations treat such vectors as a new
-   dimension."
-  [a b]
-  (array
-    (for [x a]
-      (for [y b]
-        {:a x :b y}))))
-
-(defn outer-fn
-  "Creates a function based on applying f bound to a single argument,
-   across remaining arguments that are the outer product of x and y."
-  [f x y]
-  (fn [m]
-    (emap (fn [{:keys [a b]}] (f (f m 0 a) 1 b))
-          (outer x y))))
-
 (defn =x
   "Creates a function from a matrix, that when a applied to a scalar will
    return a boolean matrix where every matrix element that matches the
@@ -61,20 +42,4 @@
         ((=x [1 2 3]) 3) => [0 0 1]"
   [a]
   (fn [x] (emap (nbool #(= x %)) a)))
-
-(defn power [f n]
-  "Returns a function that applies f n times.
-   e.g. ((power inc 3) 2) => 5"
-  #(nth (iterate f %) n))
-
-(defn power-limit
-  "Finds the fixpoint of a function starting at a given argument.
-   The function is repeatedly applied to the result of the previous application
-   until the result from the function is the same as the argument that led to it.
-   e.g. (power-limit #(min (inc %) 10) 1) => 10"
-  [f a]
-  (let [s (iterate f a)]
-    (ffirst
-      (drop-while (fn [[x y]] (not= x y))
-                  (map vector s (rest s))))))
 

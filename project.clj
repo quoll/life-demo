@@ -4,12 +4,14 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.9.0"]
-                 [org.clojure/clojurescript "1.10.238"]
+                 [org.clojure/clojurescript "1.10.339"]
+                 [org.clojure/tools.namespace "0.3.0-alpha4"]
+                 [org.clojure/java.classpath "0.2.3"]
                  [net.mikera/core.matrix "0.62.0"]
-                 [cljsjs/react "16.3.2-0"]
-                 [cljsjs/react-dom "16.3.2-0"]
+                 [cljsjs/react "16.4.1-0"]
+                 [cljsjs/react-dom "16.4.1-0"]
                  [thinktopic/aljabr "0.1.1"]
-                 [sablono "0.8.3"]]
+                 [sablono "0.8.4"]]
   :plugins [[lein-cljsbuild "1.1.7"] [lein-figwheel "0.5.16"]]
   :clean-targets ^{:protect false} [:target-path "out" "resources/public/cljs"]
   :cljsbuild {:builds [{:id "figwheel"
