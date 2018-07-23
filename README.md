@@ -59,4 +59,4 @@ typed commands.
 
 Copyright © 2018 Paula Gearon
 
-Distributed under the EPL 2.0 - the same as Clojure
+Distributed under the EPL 1.0 - the same as Clojure
