@@ -112,7 +112,7 @@
 (defn command-field
   [app-state]
   (sab/text-area
-   {:rows 5 :cols 98 :id "in"
+   {:rows 5 :cols 98 :id "in" :class "rw"
     :onChange #(swap! app-state assoc-in [:page :text] (.. % -target -value))}
    "cljs.in"
    (:text (:page @app-state))))
@@ -137,7 +137,7 @@
                                :stroke-width 1
                                :fill "white"}}]]
         raw (:raw @app-state)]
-    (if raw
+    (if (and raw (vector? raw))
       (if (vector? (first raw))
         (vec (concat frame raw))
         (conj frame raw))
@@ -212,8 +212,8 @@
                [:div {:class "desc"}
                 (paragraph desc)]
                (sab/text-area
-                {:rows 5 :cols 98 :id "in" :class "ro"}
-                "cljs.in"
+                {:rows 5 :cols 98 :id "ro" :class "ro"}
+                "cljs.ro"
                 "(js/setInterval (next-life app-state) 125)")
                (run-button app-state)
                [:div {:class "output"}
