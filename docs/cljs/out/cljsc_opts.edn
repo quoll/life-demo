@@ -1,0 +1,1 @@
+{:main "life.web", :asset-path "cljs/out", :output-to "resources/public/cljs/main.js", :output-dir "resources/public/cljs/out", :optimizations :none, :source-map-timestamp true, :preloads [figwheel.connect], :external-config #:figwheel{:config {:build-id "figwheel", :websocket-url "ws://localhost:3449/figwheel-ws"}}}
