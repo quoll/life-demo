@@ -9,6 +9,12 @@ The math, along with the description, is a direct copy of the
 REPL driven development of the
 [Life in APL](https://www.youtube.com/watch?v=a9xAKttWgP4) video
 
+## Running
+
+As with many ClojureScript applications, this one requires the
+[Leiningen]|(https://leiningen.org) build tool. Go ahead and
+install it. We'll wait.
+
 To run the demo, run:
 
 `lein figwheel`
