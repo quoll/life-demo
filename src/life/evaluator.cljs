@@ -17,6 +17,7 @@
    "(def and* life.matrix/and*)"
    "(def add clojure.core.matrix/add)"
    "(def or* life.matrix/or*)"
+   "(def mget clojure.core.matrix/mget)"
    ])
 
 (def compiler-state (cljs.js/empty-state))

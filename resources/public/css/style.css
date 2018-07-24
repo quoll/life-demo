@@ -36,12 +36,17 @@ p {
     word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
 
-pre {
-    white-space: pre-wrap;       /* Since CSS 2.1 */
-    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-    white-space: -pre-wrap;      /* Opera 4-6 */
-    white-space: -o-pre-wrap;    /* Opera 7 */
-    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+textarea {
+    font-family: Menlo, 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', Monaco, Consolas, monospace;
+    -webkit-font-smoothing: antialiased;
+    color: #444;
+    font-size: 16px;
+    line-height: 25px;
+    font-weight: 400;
+}
+
+.ro {
+    background-color: #E0E0E0;
 }
 
 .desc {
@@ -49,8 +54,8 @@ pre {
 }
 
 .output {
-    max-height: 400px;
-    min-height: 180px;
+    max-height: 435px;
+    min-height: 230px;
     overflow: hidden;
 }
 
@@ -64,6 +69,7 @@ pre {
     font-size: 14px;
     font-weight: 400;
     text-align: center;
+    margin-bottom: 2px;
 }
 
 
@@ -116,6 +122,11 @@ pre {
     color: grey;
     font-size: 14px;
     font-weight: 400;
+    text-align: center;
+    float: left!important;
+}
+
+.eval-block {
     text-align: center;
     float: left!important;
 }
