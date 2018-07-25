@@ -171,13 +171,32 @@
                  (interpose [[:br] [:br]]
                             (split s #"\|")))))
 
+(defn paragraphs
+  [s]
+  [:div {:class "text"}
+   (vec (map (fn [t] [:p t]) (split s #"\|")))])
+
+(defn intro-page
+  [app-state]
+  (let [{ev :eval nr :nr {:keys [title desc]} :page} @app-state]
+    (sab/html [:div {:class "page"}
+               (prev-button app-state)
+               (next-button app-state)
+               [:p {:class "pagenr"} (str "page " (inc nr))]
+               [:h2 title]
+               [:div {:class "desc"}
+                (paragraph desc)]
+               [:br]
+               (eval-check app-state)
+               [:br]])))
+
 (defn render-page
   [app-state page-type]
   (let [{nr :nr {:keys [title desc text]} :page} @app-state]
     (sab/html [:div {:class "page"}
                (prev-button app-state)
                (next-button app-state)
-               [:br]
+               [:p {:class "pagenr"} (str "page " (inc nr))]
                [:h2 title]
                [:div {:class "desc"}
                 (paragraph desc)]
@@ -207,7 +226,7 @@
     (sab/html [:div {:class "page"}
                (prev-stop-button app-state)
                (next-button app-state)
-               [:br]
+               [:p {:class "pagenr"} (str "page " (inc nr))]
                [:h2 title]
                [:div {:class "desc"}
                 (paragraph desc)]
@@ -221,134 +240,137 @@
                [:br]])))
 
 (def page-data
-   ;; 0
-  [[run-page1 "Initial Data" "Here is a sequence of the first 9 natural numbers" "(range 9)"]
-   ;; 1
+  [[intro-page
+    "ClojureScript Demonstration"
+    "This app demonstrates the use of ClojureScript to write a web application.|Each page takes you through a step in building an application, providing the code to be executed. Pressing \"Eval\" will evaluate the code that is typed into the code box. You are free to modify the code on each page to see how it changes things.|If \"eval automatically\" is checked, then the code will be evaluated immediately with each new page. The easiest way to view the application is to leave this turned on, and step your way through the pages.|Once you've completed the app, try changing the definitions of the \"life\" function (page 20) and \"RR\" (page 22) to see if you can make the final screen behave differently!"
+    nil]
+
+   [run-page1 "Initial Data" "Here is a sequence of the first 9 natural numbers" "(range 9)"]
+
    [run-page1
     "Initial Data"
     "A 3x3 reshape gives us a 3 row, 3 column matrix" "(reshape (array (range 9)) [3 3])"]
-   ;; 2
+
    [run-page1
     "Initial Data"
     "Which of the items of this matrix are members of the \"init\" set: 1 for yes, 0 for no."
     "(def init #{1 2 3 4 7})\n(emap (nbool init) (reshape (array (range 9)) [3 3]))"]
-   ;; 3
+
    [run-page1
     "Initial Data"
     "We'll call this boolean matrix \"r\""
     "(def r (emap (nbool init) (reshape (array (range 9)) [3 3])))"]
-   ;; 4
+
    [run-page1
     "Initial Data"
     "We can embed r is a slightly larger matrix: a 5x7 \"take\" of r which pads below and on the right with zeros."
     "(takeof [5 7] r)"]
-   ;; 5
+
    [run-page1
     "Initial Data"
     "We can center our original within this by doing the -2 rotation about a vertical axis (the second, or \"1\" dimension of the matrix)"
     "(rotate (takeof [5 7] r) 1 -2)"]
-   ;; 6
+
    [run-page1
     "Initial Data"
     "... and a -1 rotation about a horizontal axis (the first, or 0, dimension of the matrix)"
     "(rotate (rotate (takeof [5 7] r) 1 -2) 0 -1)"]
-   ;; 7
+
    [run-page1
     "Initial Data"
     "We'll call this larger matrix \"R\""
     "(def R (rotate (rotate (takeof [5 7] r) 1 -2) 0 -1))"]
-   ;; 8
+
    [run-page1 "Processing Data" "Here is a vector of 3 matrices" "[R R R]"]
-   ;; 9
+
    [run-page1
     "Processing Data"
     "We can see this more clearly if we use a library function which draws boxes around sub-arrays"
     "(disp [R R R])"]
-   ;; 10
+
    [run-page1
     "Processing Data" "mapping rotate in the second (or \"1\") dimension onto [1 0 -1] and the matrices distributes the rotation onto corresponding items in the first and second argument vectors. So we see our original \"0 rotation\" in the center, and a 1 and -1 rotation on either side"
     "(disp (map #(rotate %2 1 %1) [1 0 -1] [R R R]))"]
-   ;; 11
+
    [run-page1
     "Processing Data"
     "Another approach is to create a sequence of vectors for each rotation using a \"for\" loop. So we get the same result"
     "(disp (for [x [1 0 -1]] (rotate R 1 x)))"]
-   ;; 12
+
    [run-page1
     "Processing Data"
     "By using a \"for\" loop we can easily expand the term to rotate each of these matrices in the first (or \"0\") dimension. This creates a full outer-product of all rotations, which have been flattened into a single sequence of matrices."
     "(disp (for [y [1 0 -1] x [1 0 -1]] (rotate (rotate R 1 x) 0 y)))"]
-   ;; 13
+
    [run-page1 "Processing Data" "And if we sum the sequence we see a \"neighbor count\" for each cell in our original matrix R" "(disp (apply add (for [y [1 0 -1] x [1 0 -1]] (rotate (rotate R 1 x) 0 y))))"]
-   ;; 14
+
    [run-page1
     "Processing Data"
     "The rules of Conway's Game of Life are that you have a 1 in the following generation if the neighbor count including itself is 3, or if the neighbor count including itself is a 4 and the original cell was occupied.|So first, find the 3s and 4s.|The =x function creates a function on a matrix that will return a boolean matrix where cells are 1 when equal to the given scalar, and 0 otherwise. When the =x function is built on the neighbor-count matrix, it can then be mapped to the values 3 and 4"
     "(disp (map (=x (apply add (for [y [1 0 -1] x [1 0 -1]] (rotate (rotate R 1 x) 0 y)))) [3 4]))"]
-   ;; 15
+
    [run-page1
     "Processing Data"
     "And we're interested in any 3, and a 4 corresponding to an occupied cell, which is just our original matrix R. So we AND those masks to the 3s and 4s matrices, and with the longer lines, we will start using some formatting with indentation"
     "(disp\n  (map and*\n       [1 R]\n       (map (=x (apply add (for [y [1 0 -1] x [1 0 -1]] (rotate (rotate R 1 x) 0 y)))) [3 4])))"]
-   ;; 16
+
    [run-page1
     "Processing Data"
     "And both of these matrices contributes to the next generation. So if we OR them together..."
     "(disp\n  (apply or*\n       (map and*\n            [1 R]\n            (map (=x (apply add (for [y [1 0 -1] x [1 0 -1]] (rotate (rotate R 1 x) 0 y)))) [3 4]))))"]
-   ;; 17
+
    [run-page1
     "Processing Data"
     "...and disclose the result we see a simple matrix for the next generation of the Game of Life"
     "(apply or*\n       (map and*\n            [1 R]\n            (map (=x (apply add (for [y [1 0 -1] x [1 0 -1]] (rotate (rotate R 1 x) 0 y)))) [3 4])))"]
-   ;; 18
+
    [run-page1
     "Building the Function"
-    "So here we have a single array expression for the next generation. You'll notice that the size of the matrix R is not specified anywhere, so that the expression is applicable to a matrix of any size.|Let's extract it as a function, by replacing all occurances of R with a formal parameter o, and the function \"life\""
+    "So here we have a single array expression for the next generation. You'll notice that the size of the matrix R is not specified anywhere, so that the expression is applicable to a matrix of any size.|Let's extract it as a function, by replacing all occurances of R with a formal parameter o, and the function \"life\". The output is all the JavaScript the browser will use to make this function."
     "(defn life [o]\n  (apply or*\n         (map and*\n              [1 o]\n              (map (=x (apply add (for [y [1 0 -1] x [1 0 -1]] (rotate (rotate o 1 x) 0 y)))) [3 4]))))" :life]
-   ;; 19
+
    [run-page1
     "Building the Function"
     "Test it.|There are the first 3 generations"
     "(disp [R (life R) (life (life R))])"]
-   ;; 20
+
    [run-page1
     "Initializing"
     "Next, let's make a larger arena still, so RR is the 15x35 take of R, rotated by [10,20]"
     "(def RR (rotate (rotate (takeof [15 35] R) 1 20) 0 10))" :RR]
-   ;; 21
+
    [run-page1
     "Initializing"
     "This is difficult to see, so let's display it"
     "(disp RR)"]
 
 
-   ;; 22
    [run-page1
     "Drawing"
     "We want to draw this data, so we will start with a SVG field. This is done by rendering Clojure vector data stuctures. We want each cell to be 25 wide, so set the width and height. Let's draw a line diagonally through it."
     "(def width (* 25 35))\n(def height (* 25 15))\n[:svg {:width width :height height :x 1 :y 1}\n  [:line {:x1 0 :y1 0 :x2 width :y2 height :style {:stroke \"rgb(255,0,0)\" :stroke-width 2}}]]"]
-   ;; 23
+
    [run-page2
     "Drawing"
     "Now render this SVG"
     "[:svg {:width width :height height :x 1 :y 1}\n  [:line {:x1 0 :y1 0 :x2 width :y2 height :style {:stroke \"rgb(255,0,0)\" :stroke-width 2}}]]"]
-   ;; 24
+
    [run-page2
     "Drawing the Grid"
     "So now let's render the squares we need to make a grid. We will color them according to even/odd. Note that concatenating vectors is a lazy sequence, but the result must be a vector. The resulting code it a little long, so scroll down in the box to see it all"
     "(vec (concat [:svg {:width width :height height :x 1 :y 1}]\n             (for [x (range 35) y (range 15)]\n               [:rect {:x (* x 25) :y (* y 25) :width 25 :height 25\n                :style {:fill (if (even? (+ x y)) \"white\" \"blue\")\n                        :stroke \"white\"\n                        :stroke-width 1}}])))"]
-   ;; 25
+
    [run-page2
     "Drawing the Grid"
     "We can now print these squares based on RR. Matrices are indexed first by y, then by x"
     "(vec (concat [:svg {:width width :height height :x 1 :y 1}]\n             (for [x (range 35) y (range 15)]\n               [:rect {:x (* x 25) :y (* y 25) :width 25 :height 25\n                :style {:fill (if (zero? (mget RR y x)) \"white\" \"blue\")\n                        :stroke \"white\"\n                        :stroke-width 1}}])))"]
-   ;; 26
+
    [run-page1
     "Draw Function"
     "Based on this code, we can create a draw function for any matrix that is [15,35]. This is a library function, so we can just call it from in here"
     "(defn draw [m]\n(vec (concat [:svg {:width width :height height :x 1 :y 1}]\n               (for [x (range 35) y (range 15)]\n                 [:rect {:x (* x 25) :y (* y 25) :width 25 :height 25\n                  :style {:fill (if (zero? (mget m y x)) \"white\" \"blue\")\n                          :stroke \"white\"\n                          :stroke-width 1}}]))))" :draw]
 
-   ;; 27
+
    [run-pagex
     "Conway's Game of Life"
     "We want the page to be modified to dynamically move to successive generations. To do this, we will put the current generation of data into the page \"application state\", and introduce a timer that will execute the \"next-life\" every 1/8 of a second. This uses \"life\" to update the application state from one generation to the next. The \"draw\" function will be called to render the data.|The code shown here is how the timer will be initialized, but because it is part of the page, it cannot be modified"

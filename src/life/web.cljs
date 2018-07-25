@@ -2,7 +2,7 @@
   (:require [react-dom]
             [life.page :as page]))
 
-(defonce app-state (atom {:nr 0 :page (first page/pages) :eval false}))
+(defonce app-state (atom {:nr 0 :page (first page/pages) :eval true}))
 
 (defn render! [state]
   (let [page-fn (:fn (:page @state))]

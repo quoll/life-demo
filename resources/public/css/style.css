@@ -45,6 +45,10 @@ textarea {
     font-weight: 400;
 }
 
+.pagenr {
+    text-align: center;
+}
+
 .ro {
     background-color: #E0E0E0;
 }

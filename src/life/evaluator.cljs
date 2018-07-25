@@ -33,5 +33,5 @@
       (when-not @init
         (doseq [f init-forms] (call-eval f))
         (reset! init true))
-      (call-eval s)
+      (when s (call-eval s))
       (deref x))))
