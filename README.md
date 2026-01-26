@@ -12,7 +12,7 @@ REPL driven development of the
 ## Running
 
 As with many ClojureScript applications, this one requires the
-[Leiningen]|(https://leiningen.org) build tool. Go ahead and
+[Leiningen](https://leiningen.org) build tool. Go ahead and
 install it. We'll wait.
 
 To run the demo, run:
